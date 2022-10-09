@@ -399,8 +399,8 @@ save(cellRoadCov, file = "data/cellRoadCov.RData")
 
 # Distance to barriers
 # Waterways
-waterways <- shapefile("data/waterways/COURS_D_EAU.SHP")
-fleuves <- waterways[waterways$TOPONYME %in% c("La Seine", "La Garonne", "La Loire", "Le Rh\xf4ne", "Le Rhin"), ]
+waterways <- shapefile("data/waterways/CoursEau_FXX.shp")
+fleuves <- waterways[waterways$NomEntiteH %in% c("La Seine", "La Garonne", "La Loire", "Le Rhône", "Le Rhin"), ]
 fleuves$length <- gLength(fleuves, byid = TRUE)
 fleuves5 <- fleuves[fleuves$length > 15000, ]
 # Highways
