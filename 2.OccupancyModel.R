@@ -460,11 +460,11 @@ MCMCtrace(object = samples,
 ##################
 
 # Load Nimble results
-load("modelOutputs/fullModel.RData")
+load("modelOutputs/modelSignificantVar.RData")
 # Remove the covariates and keep only the occupancy estimates
-chain1 <- samples[[1]][, 19:ncol(samples[[1]])]
-chain2 <- samples[[2]][, 19:ncol(samples[[2]])]
-dim(chain1) # 8000 161057
+chain1 <- samples[[1]][, 18:ncol(samples[[1]])]
+chain2 <- samples[[2]][, 18:ncol(samples[[2]])]
+dim(chain1) # 8000 161056
 # 8000 = 10000 (iterations) - 2000 (burn-in)
 # 161056 = 5752 cells * 28 years
 
@@ -506,7 +506,7 @@ for(i in 1:28){
   df_Full <- merge(df_, data.frame(cellID = 1:length(gridFr)), all.y = TRUE)
   df_FullSort <- df_Full[order(as.numeric(as.character(df_Full$cellID))), ]
   # NA for the cells not sampled during the year
-  df_FullSort[is.na(df_FullSort[,"cellSampled"] | df_FullSort[,"cellSampled"] == 0), "zProb"] <- NA
+  df_FullSort[is.na(df_FullSort[,"cellSampled"]) | df_FullSort[,"cellSampled"] == 0, "zProb"] <- NA
   
   # Put the occupancy value on the map
   grid_zprob <- rasterize(gridFr, gridRaster, df_FullSort$zProb)
@@ -525,7 +525,7 @@ for(i in 1:28){
   df_Full <- merge(df_, data.frame(cellID = 1:length(gridFr)), all.y = TRUE)
   df_FullSort <- df_Full[order(as.numeric(as.character(df_Full$cellID))), ]
   # NA for the cells not sampled during the year
-  df_FullSort[is.na(df_FullSort[,"cellSampled"] | df_FullSort[,"cellSampled"] == 0), "zProb"] <- NA
+  df_FullSort[is.na(df_FullSort[,"cellSampled"]) | df_FullSort[,"cellSampled"] == 0, "zProb"] <- NA
   
   # Put the occupancy value on the map
   grid_zprob <- rasterize(gridFr, gridRaster, df_FullSort$zProb)
@@ -544,7 +544,7 @@ for(i in 1:28){
   df_Full <- merge(df_, data.frame(cellID = 1:length(gridFr)), all.y = TRUE)
   df_FullSort <- df_Full[order(as.numeric(as.character(df_Full$cellID))), ]
   # NA for the cells not sampled during the year
-  df_FullSort[is.na(df_FullSort[,"cellSampled"] | df_FullSort[,"cellSampled"] == 0), "zProb"] <- NA
+  df_FullSort[is.na(df_FullSort[,"cellSampled"]) | df_FullSort[,"cellSampled"] == 0, "zProb"] <- NA
   
   # Put the occupancy value on the map
   grid_zprob <- rasterize(gridFr, gridRaster, df_FullSort$zProb)
