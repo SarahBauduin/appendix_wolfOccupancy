@@ -14,8 +14,8 @@ load("modelOutputs/rasterYears.RData")
 load("data/franceShape.RData") # shapefile of France
 
 # The bast calibration from the metric calibration
-probThresh = 0.72
-bufferkm = 15
+probThresh = 0.4
+bufferkm = 10
 
 # Maps into 'occupied' and 'non-occupied'
 rasterYearsTr <- list()
@@ -53,8 +53,8 @@ for(i in 1:(length(rasterYearsTr) - 1)){
   
   nCellDiff <- sum(values(rasterYearsTr[[i + 1]]), na.rm = TRUE) - sum(values(rasterYearsTr[[i]]), na.rm = TRUE)
   nCellChange <- sum(values(rasterYearsTrDiff) != 0)
-  nCellBecome1 <- sum(values(rasterYearsTrDiff) == -1)
-  nCellBecome0 <- sum(values(rasterYearsTrDiff) == 1)
+  nCellBecome1 <- sum(values(rasterYearsTrDiff) == 1)
+  nCellBecome0 <- sum(values(rasterYearsTrDiff) == -1)
   
   print(paste0("Between winter ", yearStart + i - 1, "-", yearStart + i, 
                " and winter ", yearStart + i, "-", yearStart + i + 1, 

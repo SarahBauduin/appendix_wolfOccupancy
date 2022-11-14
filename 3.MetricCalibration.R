@@ -230,7 +230,7 @@ axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 ##############
 
 # Find the best calibration (where the three patterns combined = 1)
-probThresh = 0.5
+probThresh = 0.4
 bufferkm = 10
 
 # Compare the produce maps with these parameter values with the real PPAs
