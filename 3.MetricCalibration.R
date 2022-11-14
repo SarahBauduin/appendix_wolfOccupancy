@@ -110,9 +110,6 @@ validationPPA <- function(raster2winter, PPA, packPPA, nonPackPPA, sampledCells)
 # Calibrating parameters
 # Computing the three patterns with probThresh from 0 to 1 (each 0.01)
 # and for the bufferkm with 0, 10, 15 km
-listResPropInPackPPA <- list()
-listResPropInNonPackPPA <- list()
-listResPropOutPPA <- list()
 
 # Define for each year the cells that were sampled
 cellSampled <- list()
@@ -125,6 +122,10 @@ for(i in 1:length(rasterYears)){
 
 rasterYearCal <- rasterYears[16:27] # Winter 2008/2009 to winter 2019/2020
 cellSampledCal <- cellSampled[16:27]
+
+listResPropInPackPPA <- list()
+listResPropInNonPackPPA <- list()
+listResPropOutPPA <- list()
 
 for(year in 1:(length(rasterYearCal) - 1)){
   
@@ -165,7 +166,9 @@ for(year in 1:(length(rasterYearCal) - 1)){
   print(paste0("year = ", year))
 }
 
-save(listResPropInPackPPA, listResPropInNonPackPPA, listResPropOutPPA, file = "calibrationOutputs/validPPA.RData")
+save(listResPropInPackPPA, listResPropInNonPackPPA, listResPropOutPPA, 
+     rasterYearCal, cellSampledCal,
+     file = "calibrationOutputs/validPPA.RData")
 
 
 ########################
@@ -226,9 +229,9 @@ axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 # Validation #
 ##############
 
-# Find the best calibration (where the three patterns combined = 0)
-probThresh = 0.72
-bufferkm = 15
+# Find the best calibration (where the three patterns combined = 1)
+probThresh = 0.5
+bufferkm = 10
 
 # Compare the produce maps with these parameter values with the real PPAs
 ResPropInPackPPA <- rep(NA, (length(rasterYearCal) - 1))
