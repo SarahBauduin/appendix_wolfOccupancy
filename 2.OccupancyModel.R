@@ -494,7 +494,7 @@ for(i in 1:28){
 # Create the raster maps of occupancy for each year
 load("data/gridFr.RData")
 gridRaster <- raster(xmn = extent(gridFr)[1], xmx =  extent(gridFr)[2], 
-                     ymn =  extent(gridFr)[3], ymx =  extent(gridFr)[4], resolution = c(1000,1000))
+                     ymn =  extent(gridFr)[3], ymx =  extent(gridFr)[4], resolution = c(10000, 10000))
 load("data/franceShape.RData") # shapefile of France
 yearStart <- 1993
 rasterYears <- list()
