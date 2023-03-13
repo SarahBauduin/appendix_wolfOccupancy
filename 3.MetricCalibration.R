@@ -220,7 +220,7 @@ allPattern = (allPattern - min(allPattern)) / (max(allPattern) - min(allPattern)
 plot(allPattern, border = NA, col = colorRamps::magenta2green(20),
      key = list(side = 3, cex.axis = 0.75), xlab = "Occupancy probability threshold ", 
      ylab = "Buffer size around 'occupied' cells", axis.col = NULL, axis.row = NULL,
-     main = "Thre paterrns combined")
+     main = "Three paterrns combined")
 axis(1, at = 1:ncol(allPattern), labels = seq(0.01, 1, by = 0.01))
 axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 
