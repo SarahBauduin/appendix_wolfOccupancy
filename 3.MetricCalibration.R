@@ -8,6 +8,8 @@ library(raster)
 library(rgeos)
 library(colorRamps)
 library(plot.matrix)
+library(ggplot2)
+library(viridis)
 
 # Two parameters to estimate:
 # The threshold for the occupancy probability above which a cell is considered "occupied"
@@ -192,24 +194,27 @@ meanPropInPackPPARescale2 <- rbind(meanPropInPackPPARescale[3,], meanPropInPackP
 meanPropInNonPackPPARescale2 <- rbind(meanPropInNonPackPPARescale[3,], meanPropInNonPackPPARescale[2,], meanPropInNonPackPPARescale[1,])
 meanPropOutPPARescale2 <- rbind(meanPropOutPPARescale[3,], meanPropOutPPARescale[2,], meanPropOutPPARescale[1,])
 
-plot(meanPropInPackPPARescale2, border = NA, col = colorRamps::magenta2green(20),
+plot(meanPropInPackPPARescale2, border = NA, col = viridis(20),
      key = list(side = 3, cex.axis = 0.75), xlab = "Occupancy probability threshold ", 
-     ylab="Buffer size around 'occupied' cells", axis.col=NULL, axis.row=NULL,
-     main = "Proportion of 'occupied' cells in pack PPAs")
+     ylab = "Buffer size around 'occupied' cells", axis.col = NULL, axis.row = NULL,
+     #main = "Proportion of 'occupied' cells in pack PPAs")
+     main = "")
 axis(1, at = 1:ncol(meanPropInPackPPARescale2), labels = seq(0.01, 1, by = 0.01))
 axis(2, at = 1:nrow(meanPropInPackPPARescale2), labels = c(0, 10, 15))
 
-plot(meanPropInNonPackPPARescale2, border = NA, col = colorRamps::magenta2green(20),
+plot(meanPropInNonPackPPARescale2, border = NA, col = viridis(20),
      key = list(side = 3, cex.axis = 0.75), xlab = "Occupancy probability threshold ", 
      ylab = "Buffer size around 'occupied' cells", axis.col = NULL, axis.row = NULL,
-     main = "Proportion of 'occupied' cells in non-pack PPAs")
+     #main = "Proportion of 'occupied' cells in non-pack PPAs")
+     main = "")
 axis(1, at = 1:ncol(meanPropInNonPackPPARescale2), labels = seq(0.01, 1, by = 0.01))
 axis(2, at = 1:nrow(meanPropInNonPackPPARescale2), labels = c(0, 10, 15))
 
-plot(meanPropOutPPARescale2, border = NA, col = colorRamps::magenta2green(20),
+plot(meanPropOutPPARescale2, border = NA, col = viridis(20),
      key = list(side = 3, cex.axis = 0.75), xlab = "Occupancy probability threshold ", 
      ylab = "Buffer size around 'occupied' cells", axis.col = NULL, axis.row = NULL,
-     main = "Proportion of 'non occupied' cells outisde of PPAs")
+     #main = "Proportion of 'non occupied' cells outisde of PPAs")
+     main = "")
 axis(1, at = 1:ncol(meanPropOutPPARescale2), labels = seq(0.01, 1, by = 0.01))
 axis(2, at = 1:nrow(meanPropOutPPARescale2), labels = c(0, 10, 15))
 
@@ -217,10 +222,11 @@ axis(2, at = 1:nrow(meanPropOutPPARescale2), labels = c(0, 10, 15))
 # Weight to weight presence in PPAs as much as absence outside of PPAs
 allPattern <- (meanPropInPackPPARescale2 * 0.5) + (meanPropInNonPackPPARescale2 * 0.5) + meanPropOutPPARescale2
 allPattern = (allPattern - min(allPattern)) / (max(allPattern) - min(allPattern))
-plot(allPattern, border = NA, col = colorRamps::magenta2green(20),
+plot(allPattern, border = NA, col = viridis(20),
      key = list(side = 3, cex.axis = 0.75), xlab = "Occupancy probability threshold ", 
      ylab = "Buffer size around 'occupied' cells", axis.col = NULL, axis.row = NULL,
-     main = "Three paterrns combined")
+     #main = "Three paterrns combined")
+     main = "")
 axis(1, at = 1:ncol(allPattern), labels = seq(0.01, 1, by = 0.01))
 axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 
@@ -230,7 +236,7 @@ axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 ##############
 
 # Find the best calibration (where the three patterns combined = 1)
-probThresh = 0.4
+probThresh = 0.54
 bufferkm = 10
 
 # Compare the produce maps with these parameter values with the real PPAs
@@ -299,7 +305,7 @@ resPropInNewPPA <- rep(NA, (length(rasterYearCal) - 1))
 resPropInLostPPA <- rep(NA, (length(rasterYearCal) - 1))
 
 for(year in 2:(length(rasterYearCal) - 1)){
-  
+
   # Build a map of PPA with two consecutive winters
   raster2winter <- occ2winters(occWinter1 = rasterYearCal[[year]], 
                                occWinter2 = rasterYearCal[[year + 1]],
@@ -307,18 +313,17 @@ for(year in 2:(length(rasterYearCal) - 1)){
   
   # How well new PPA appearing are represented by 'occupied' cells
   resPropInNewPPA[year] <- validDisAppearPPA(raster2winter = raster2winter, 
-                                   PPA = listNewPPA[[year]], 
-                                   sampledCells = cellSampledCal[[year]])
+                                             PPA = listNewPPA[[year]], 
+                                             sampledCells = cellSampledCal[[year]])
   
   # How well PPA disappearing are represented by 'non-occupied' cells
-  resPropInLostPPA[year] <- validDisAppearPPA(raster2winter = raster2winter, 
-                                    PPA = listLostPPA[[year - 1]], 
-                                    sampledCells = cellSampledCal[[year]])
+  resPropInLostPPA[year] <- 1 - validDisAppearPPA(raster2winter = raster2winter, 
+                                              PPA = listLostPPA[[year - 1]], 
+                                              sampledCells = cellSampledCal[[year]])
 }
 
 round((mean(resPropInNewPPA, na.rm = TRUE) * 100)) # % of cells correctly defined as 'occupied' in new PPA (that appear this year)
 round((mean(resPropInLostPPA, na.rm = TRUE) * 100)) # % of cells correctly defined as 'non-occupied' in areas where PPA disappear (disappear this year)
-
 
 # Comparing the growth rates over time from the occupancy maps with those derived from population size computed with CMR models
 estimateCMR <- c(17.1, 35.4, 47.7, 24.7, 58.4, 45.7, 76.1, 103.1, 97.2, 122.5, 125.2,
