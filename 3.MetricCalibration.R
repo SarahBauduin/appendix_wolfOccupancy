@@ -326,9 +326,9 @@ round((mean(resPropInNewPPA, na.rm = TRUE) * 100)) # % of cells correctly define
 round((mean(resPropInLostPPA, na.rm = TRUE) * 100)) # % of cells correctly defined as 'non-occupied' in areas where PPA disappear (disappear this year)
 
 # Comparing the growth rates over time from the occupancy maps with those derived from population size computed with CMR models
-estimateCMR <- c(17.1, 35.4, 47.7, 24.7, 58.4, 45.7, 76.1, 103.1, 97.2, 122.5, 125.2,
-                 101.1, 118.7, 135.9, 134.3, 164.7, 201.2, 167.4, 337.1, 275.7, 341.4,
-                 529.9, 540.7, 563.6, 577, 620) # Winter 1995/1996 to 2020/2021
+estimateCMR <- c(17.1, 35.4, 47.7, 25.1, 62.6, 47.9, 81.7, 110.5, 102.7, 135.9, 132.6, 
+                 101.7, 130.3, 141.4, 141.5, 175.5, 210.3, 174.5, 353.6, 280.2, 376.7,
+                 561.2, 571.9, 682.4, 645.7, 783.8) # Winter 1995/1996 to 2020/2021
 
 cellOcc <- c()
 # How many cells are 'occupied' each year
