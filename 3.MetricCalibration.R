@@ -32,7 +32,7 @@ yearStartPPA <- 2009
 ##########################
 
 # Load the estimated occupancy maps
-load("modelOutputs/rasterYears.RData")
+load("modelOutputs/noScaleShortDisp_noCull_effAl_7500_rasterYears.RData")
 # The first map is of winter 1993/1994
 load("data/franceShape.RData")
 
@@ -170,7 +170,7 @@ for(year in 1:(length(rasterYearCal) - 1)){
 
 save(listResPropInPackPPA, listResPropInNonPackPPA, listResPropOutPPA, 
      rasterYearCal, cellSampledCal,
-     file = "calibrationOutputs/validPPA.RData")
+     file = "calibrationOutputs/noScaleShortDisp_noCull_effAl_7500_validPPA.RData")
 
 
 ########################
@@ -236,7 +236,7 @@ axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 ##############
 
 # Find the best calibration (where the three patterns combined = 1)
-probThresh = 0.54
+probThresh = 0.51
 bufferkm = 10
 
 # Compare the produce maps with these parameter values with the real PPAs
@@ -354,6 +354,28 @@ round(sd(diffGowthCellOcc, na.rm = TRUE), digits = 3)
 winterYears <- c("96/97", "97/98", "98/99", "99/00", "00/01", "01/02", "02/03", "03/04", "04/05", "05/06", "06/07", "07/08", "08/09", "09/10", "10/11", "11/12", "12/13", "13/14", "14/15", "15/16", "16/17", "17/18", "18/19", "19/20", "20/21")
 plot(x = 1996:2020, y = growthRateCMR, xlab = "Winter", ylab = "Growth rate", type = "l",lwd = 2, xaxt = 'n')
 lines(x = 1996:2020, y = growthCellOcc, col = "forestgreen", lwd = 2)
+abline(h = 1, lty = 2)
 axis(1, at = 1996:2020, labels=winterYears)
 legend("topright", legend = c("CMR", "Occupancy"), col = c("black", "forestgreen"), lty = c(1, 1), lwd = c(2, 2))
 
+# Look at the growth compared to t0
+occGrowth <-((cellOcc - cellOcc[1]) / cellOcc[1]) * 100
+occ0025_ <- occ0025[3:28]
+occ0975_ <- occ0975[3:28]
+occGrowth0025 <-((occ0025_ - occ0025_[1]) / occ0025_[1]) * 100
+occGrowth0975 <-((occ0975_ - occ0975_[1]) / occ0975_[1]) * 100
+CMRGrowth <-((estimateCMR - estimateCMR[1]) / estimateCMR[1]) * 100
+cmr25 <- c(1.8, 20.8, 25.9, 10, 32.9, 28.3, 49.8, 75.2, 71.7, 96.9, 94.7, 73.7, 95, 100.1, 105.5,
+           132, 161.3, 132.1, 278.6, 217.1, 285.9, 432.2, 460.9, 539.3, 508.6, 641.5)
+CMRGrowth0025 <-((cmr25 - cmr25[1]) / cmr25[1]) * 100
+cmr975 <- c(33.9, 60.5, 73.2, 59.2, 137.6, 89, 150.1, 217.6, 201.8, 281.9, 258.5, 202.2, 277.6, 288,
+            285.5, 358.8, 407.7, 352.5, 706.5, 583.2, 755.4, 883.6, 904.2, 968.6, 934.7, 978.1)
+CMRGrowth0975 <-((cmr975 - cmr975[1]) / cmr975[1]) * 100
+
+plot(x = 1995:2020, y = occGrowth, ylim = c(0, max(CMRGrowth)),
+     main = "", xlab = "Years", ylab = "Growth compared to t0 in %", type = "l")
+# polygon(c(1995:2020, rev(1995:2020)),
+#         c(occGrowth0975, rev(occGrowth0025)), col = "gray85", lty = 0)
+lines(x = 1995:2020, y = CMRGrowth, lwd = 2)
+# polygon(c(1996:2021, rev(1996:2021)), 
+#         c(CMRGrowth0975, rev(CMRGrowth0025)), col = "gray85", lty = 0)

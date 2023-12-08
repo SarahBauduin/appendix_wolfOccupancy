@@ -10,11 +10,11 @@ library(raster)
 # and then compare them from year to year to follow trends in population
 
 # Load the estimated occupancy maps
-load("modelOutputs/rasterYears.RData")
+load("modelOutputs/noScaleShortDisp_noCull_effAl_7500_rasterYears.RData")
 load("data/franceShape.RData") # shapefile of France
 
 # The bast calibration from the metric calibration
-probThresh = 0.4
+probThresh = 0.51
 bufferkm = 10
 
 # Maps into 'occupied' and 'non-occupied'
@@ -68,8 +68,8 @@ for(i in 1:(length(rasterYearsTr) - 1)){
 
 # Changes in occupancy over time
 # To include a confidence interval, use the occupancy maps defined with the quantiles
-load("modelOutputs/rasterYearsQ0025.RData")
-load("modelOutputs/rasterYearsQ0975.RData")
+load("modelOutputs/noScaleShortDisp_noCull_effAl_7500_rasterYearsQ0025.RData")
+load("modelOutputs/noScaleShortDisp_noCull_effAl_7500_rasterYearsQ0975.RData")
 
 occ0025 <- numeric()
 occ0975 <- numeric()
@@ -123,3 +123,13 @@ polygon(c(yearStart:(yearStart + length(occMean) - 1), rev(yearStart:(yearStart 
         c(occ0975, rev(occ0025)), col = "gray85", lty = 0)
 lines(x = yearStart:(yearStart + length(occMean) - 1), y = occMean, lwd = 2)
 
+# Look at the growth compared to t0
+occGrowth <-((occMean - occMean[1]) / occMean[1]) * 100
+occGrowth0025 <-((occ0025 - occ0025[1]) / occ0025[1]) * 100
+occGrowth0975 <-((occ0975 - occ0975[1]) / occ0975[1]) * 100
+
+plot(x = yearStart:(yearStart + length(occMean) - 1), y = occGrowth, ylim = c(0, max(occGrowth0975)),
+     main = "", xlab = "Years", ylab = "Growth compared to t0 in %", type = "l")
+polygon(c(yearStart:(yearStart + length(occMean) - 1), rev(yearStart:(yearStart + length(occMean) - 1))), 
+        c(occGrowth0975, rev(occGrowth0025)), col = "gray85", lty = 0)
+lines(x = yearStart:(yearStart + length(occMean) - 1), y = occGrowth, lwd = 2)
