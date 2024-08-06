@@ -58,24 +58,24 @@ occ2winters <- function(occWinter1, occWinter2, probThresh, bufferkm){
   occWinterBoth[] <- 0
   
   # Raster 1st winter - Define the "occupied" cells
-  occWinter1[which(is.na(values(occWinter1)) | values(occWinter1) < probThresh)] <- 0
-  occWinter1[which(values(occWinter1) >= probThresh)] <- 1
-  occWinter1[values(occWinter1) == 0] <- NA
+  occWinter1[which(is.na(raster::values(occWinter1)) | raster::values(occWinter1) < probThresh)] <- 0
+  occWinter1[which(raster::values(occWinter1) >= probThresh)] <- 1
+  occWinter1[raster::values(occWinter1) == 0] <- NA
   if(bufferkm != 0){
     occWinter1 <- buffer(occWinter1, width = bufferkm * 1000)
   }
   # Raster 2nd winter - Define the "occupied" cells
-  occWinter2[which(is.na(values(occWinter2)) | values(occWinter2) < probThresh)] <- 0
-  occWinter2[which(values(occWinter2) >= probThresh)] <- 1
-  occWinter2[values(occWinter2) == 0] <- NA
+  occWinter2[which(is.na(raster::values(occWinter2)) | raster::values(occWinter2) < probThresh)] <- 0
+  occWinter2[which(raster::values(occWinter2) >= probThresh)] <- 1
+  occWinter2[raster::values(occWinter2) == 0] <- NA
   if(bufferkm != 0){
     occWinter2 <- buffer(occWinter2, width = bufferkm * 1000)
   }
   
   # Combine the two maps
-  occWinterBoth[] <- values(occWinter1) + values(occWinter2)
-  occWinterBoth[is.na(values(occWinterBoth)) | values(occWinterBoth) != 2] <- 0
-  occWinterBoth[values(occWinterBoth) == 2] <- 1
+  occWinterBoth[] <- raster::values(occWinter1) + raster::values(occWinter2)
+  occWinterBoth[is.na(raster::values(occWinterBoth)) | raster::values(occWinterBoth) != 2] <- 0
+  occWinterBoth[raster::values(occWinterBoth) == 2] <- 1
   return(occWinterBoth)
 }
 
@@ -337,13 +337,13 @@ for(year in 1:length(rasterYears[3:28])){ # Winter 1995/1996 to 2020/2021
   occWinter <- rasterYears[3:28][[year]]
   occWinter@crs <- CRS("+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
   
-  occWinter[which(is.na(values(occWinter)) | values(occWinter) < probThresh)] <- 0
-  occWinter[which(values(occWinter) >= probThresh)] <- 1
-  occWinter[values(occWinter) == 0] <- NA
+  occWinter[which(is.na(raster::values(occWinter)) | raster::values(occWinter) < probThresh)] <- 0
+  occWinter[which(raster::values(occWinter) >= probThresh)] <- 1
+  occWinter[raster::values(occWinter) == 0] <- NA
   if(bufferkm != 0){
     occWinter <- buffer(occWinter, width = bufferkm * 1000)
   }
-  cellOcc <- c(cellOcc, sum(values(occWinter), na.rm = TRUE))
+  cellOcc <- c(cellOcc, sum(raster::values(occWinter), na.rm = TRUE))
 }
 growthCellOcc <- cellOcc[2:length(cellOcc)] / cellOcc[1:(length(cellOcc) - 1)]
 growthRateCMR <- estimateCMR[2:length(estimateCMR)]/estimateCMR[1:(length(estimateCMR) - 1)]
@@ -360,7 +360,7 @@ legend("topright", legend = c("CMR", "Occupancy"), col = c("black", "forestgreen
 
 # Look at the growth compared to t0
 occGrowth <-((cellOcc - cellOcc[1]) / cellOcc[1]) * 100
-occ0025_ <- occ0025[3:28]
+occ0025_ <- occ0025[3:28] # load occ0025 and occ0975 using 4.UseIndicator.R
 occ0975_ <- occ0975[3:28]
 occGrowth0025 <-((occ0025_ - occ0025_[1]) / occ0025_[1]) * 100
 occGrowth0975 <-((occ0975_ - occ0975_[1]) / occ0975_[1]) * 100

@@ -22,9 +22,9 @@ wolfData <- read.csv("data/wolfData/wolfDataExtract.csv", header = TRUE, sep = "
 # Select validated data with a date and coordinates
 wolves <- wolfData[wolfData$Fiabilite == "R" & wolfData$date != "" & !is.na(wolfData$X) & !is.na(wolfData$Y), ] # 29719 observations
 # Coordinate system for the locations is RGF93/lambert 93
-# +proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+# +proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +units=m +no_defs
 wolvesSP <- SpatialPointsDataFrame(coords = wolves[,c("X", "Y")], data = wolves, 
-                                   proj4string = CRS(as.character("+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")),
+                                   proj4string = CRS(as.character("+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +units=m +no_defs")),
                                    match.ID = TRUE, bbox = NULL)
 wolvesSP$date <- as.Date(wolvesSP$date, format = "%Y-%m-%d")
 
@@ -47,7 +47,7 @@ for(year in yearStart:yearEnd){
                              wolvesSP$date < as.Date(paste0(year + 1, "-03-01"), format = "%Y-%m-%d"),]
   marYearPlus1 <- wolvesSP[wolvesSP$date >= as.Date(paste0(year + 1, "-03-01"), format = "%Y-%m-%d") & 
                              wolvesSP$date < as.Date(paste0(year + 1, "-04-01"), format = "%Y-%m-%d"),]
-  
+
   # Find in which cells observations were made
   if(length(novYear) != 0){
     novCells <- over(novYear, gridFr)

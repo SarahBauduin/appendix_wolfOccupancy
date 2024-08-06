@@ -23,9 +23,9 @@ rasterYearsTr <- list()
 for(i in 1:length(rasterYears)){
   
   occWinter <- rasterYears[[i]]
-  occWinter[which(is.na(values(occWinter)) | values(occWinter) < probThresh)] <- 0
-  occWinter[which(values(occWinter) >= probThresh)] <- 1
-  occWinter[values(occWinter) == 0] <- NA
+  occWinter[which(is.na(raster::values(occWinter)) | raster::values(occWinter) < probThresh)] <- 0
+  occWinter[which(raster::values(occWinter) >= probThresh)] <- 1
+  occWinter[raster::values(occWinter) == 0] <- NA
   if(bufferkm != 0){
     occWinter <- buffer(occWinter, width = bufferkm * 1000)
   }
@@ -43,7 +43,7 @@ for(i in 1:(length(rasterYearsTr) - 1)){
   colors <- c("red","white","forestgreen")
   
   rasterYearsTrDiff <- rasterYearsTr[[i]]
-  rasterYearsTrDiff[] <-  values(rasterYearsTr[[i + 1]]) -  values(rasterYearsTr[[i]])
+  rasterYearsTrDiff[] <-  raster::values(rasterYearsTr[[i + 1]]) -  raster::values(rasterYearsTr[[i]])
   plot(rasterYearsTrDiff, main = paste0("Difference between winter ", yearStart + i - 1, "-", yearStart + i,
                                         " \nand winter ", yearStart + i, "-", yearStart + i + 1),
        breaks = breakpoints, col = colors, legend = FALSE)
@@ -51,10 +51,10 @@ for(i in 1:(length(rasterYearsTr) - 1)){
   legend("topleft", legend = c("Newly 'occupied' cells" ,"Newly 'non-occupied' cells"), 
          fill = c("forestgreen","red"))
   
-  nCellDiff <- sum(values(rasterYearsTr[[i + 1]]), na.rm = TRUE) - sum(values(rasterYearsTr[[i]]), na.rm = TRUE)
-  nCellChange <- sum(values(rasterYearsTrDiff) != 0)
-  nCellBecome1 <- sum(values(rasterYearsTrDiff) == 1)
-  nCellBecome0 <- sum(values(rasterYearsTrDiff) == -1)
+  nCellDiff <- sum(raster::values(rasterYearsTr[[i + 1]]), na.rm = TRUE) - sum(raster::values(rasterYearsTr[[i]]), na.rm = TRUE)
+  nCellChange <- sum(raster::values(rasterYearsTrDiff) != 0)
+  nCellBecome1 <- sum(raster::values(rasterYearsTrDiff) == 1)
+  nCellBecome0 <- sum(raster::values(rasterYearsTrDiff) == -1)
   
   print(paste0("Between winter ", yearStart + i - 1, "-", yearStart + i, 
                " and winter ", yearStart + i, "-", yearStart + i + 1, 
@@ -81,40 +81,40 @@ for(i in 1:length(rasterYearsQ0025)){
   occWinter <- rasterYearsQ0025[[i]]
   occWinter@crs <- CRS("+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
   
-  occWinter[which(is.na(values(occWinter)) | values(occWinter) < probThresh)] <- 0
-  occWinter[which(values(occWinter) >= probThresh)] <- 1
-  occWinter[values(occWinter) == 0] <- NA
+  occWinter[which(is.na(raster::values(occWinter)) | raster::values(occWinter) < probThresh)] <- 0
+  occWinter[which(raster::values(occWinter) >= probThresh)] <- 1
+  occWinter[raster::values(occWinter) == 0] <- NA
   if(bufferkm != 0){
     occWinter <- buffer(occWinter, width = bufferkm * 1000)
   }
   
-  occ0025 <- c(occ0025, sum(values(occWinter), na.rm = TRUE))
+  occ0025 <- c(occ0025, sum(raster::values(occWinter), na.rm = TRUE))
   
   # 97.5% confidence interval
   occWinter <- rasterYearsQ0975[[i]]
   occWinter@crs <- CRS("+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
   
-  occWinter[which(is.na(values(occWinter)) | values(occWinter) < probThresh)] <- 0
-  occWinter[which(values(occWinter) >= probThresh)] <- 1
-  occWinter[values(occWinter) == 0] <- NA
+  occWinter[which(is.na(raster::values(occWinter)) | raster::values(occWinter) < probThresh)] <- 0
+  occWinter[which(raster::values(occWinter) >= probThresh)] <- 1
+  occWinter[raster::values(occWinter) == 0] <- NA
   if(bufferkm != 0){
     occWinter <- buffer(occWinter, width = bufferkm * 1000)
   }
   
-  occ0975 <- c(occ0975, sum(values(occWinter), na.rm = TRUE))
+  occ0975 <- c(occ0975, sum(raster::values(occWinter), na.rm = TRUE))
   
   # Mean
   occWinter <- rasterYears[[i]]
   occWinter@crs <- CRS("+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
   
-  occWinter[which(is.na(values(occWinter)) | values(occWinter) < probThresh)] <- 0
-  occWinter[which(values(occWinter) >= probThresh)] <- 1
-  occWinter[values(occWinter) == 0] <- NA
+  occWinter[which(is.na(raster::values(occWinter)) | raster::values(occWinter) < probThresh)] <- 0
+  occWinter[which(raster::values(occWinter) >= probThresh)] <- 1
+  occWinter[raster::values(occWinter) == 0] <- NA
   if(bufferkm != 0){
     occWinter <- buffer(occWinter, width = bufferkm * 1000)
   }
   
-  occMean <- c(occMean, sum(values(occWinter), na.rm = TRUE))
+  occMean <- c(occMean, sum(raster::values(occWinter), na.rm = TRUE))
 }
 
 plot(x = yearStart:(yearStart + length(occMean) - 1), y = occMean, ylim = c(0, max(occ0975)),
