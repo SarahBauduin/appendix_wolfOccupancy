@@ -1,5 +1,5 @@
 
-##This repository contains all the data and R codes linked to the article **Calibrating an occupancy metric to monitor elusive territorial species at large scale: application to the gray wolf population in France**.
+## This repository contains all the data and R codes linked to the article **Calibrating an occupancy metric to monitor elusive territorial species at large scale: application to the gray wolf population in France**.
 
 **1.PrepareData.R** is the script to produce all the covariates necessary to run the wolf dynamic occupancy model. The variables produced are stored in the **data** folder.
 
