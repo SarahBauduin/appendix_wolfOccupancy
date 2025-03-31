@@ -13,9 +13,9 @@ library(raster)
 load("modelOutputs/noScaleShortDisp_noCull_effAl_7500_rasterYears.RData")
 load("data/franceShape.RData") # shapefile of France
 
-# The bast calibration from the metric calibration
-probThresh = 0.51
-bufferkm = 10
+# The best calibration from the metric calibration
+probThresh = 0.59
+bufferkm = 15
 
 # Maps into 'occupied' and 'non-occupied'
 rasterYearsTr <- list()

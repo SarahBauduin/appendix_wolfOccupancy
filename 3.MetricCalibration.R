@@ -177,7 +177,7 @@ save(listResPropInPackPPA, listResPropInNonPackPPA, listResPropOutPPA,
 # Calibrate parameters #
 ########################
 
-load("calibrationOutputs/validPPA.RData")
+load("calibrationOutputs/noScaleShortDisp_noCull_effAl_7500_validPPA.RData")
 
 # Compute the mean pattern values over all years
 meanPropInPackPPA <- apply(simplify2array(listResPropInPackPPA), 1:2, mean)
@@ -220,7 +220,10 @@ axis(2, at = 1:nrow(meanPropOutPPARescale2), labels = c(0, 10, 15))
 
 # Combining the results for the three patterns to find the calibration that best represent them all
 # Weight to weight presence in PPAs as much as absence outside of PPAs
-allPattern <- (meanPropInPackPPARescale2 * 0.5) + (meanPropInNonPackPPARescale2 * 0.5) + meanPropOutPPARescale2
+w1 <- 0.5
+w2 <- 0.5
+w3 <- 2
+allPattern <- (meanPropInPackPPARescale2 * w1) + (meanPropInNonPackPPARescale2 * w2) + (meanPropOutPPARescale2 * w3)
 allPattern = (allPattern - min(allPattern)) / (max(allPattern) - min(allPattern))
 plot(allPattern, border = NA, col = viridis(20),
      key = list(side = 3, cex.axis = 0.75), xlab = "Occupancy probability threshold ", 
@@ -236,7 +239,7 @@ axis(2, at = 1:nrow(allPattern), labels = c(0, 10, 15))
 ##############
 
 # Find the best calibration (where the three patterns combined = 1)
-probThresh = 0.51
+probThresh = 1
 bufferkm = 10
 
 # Compare the produce maps with these parameter values with the real PPAs
